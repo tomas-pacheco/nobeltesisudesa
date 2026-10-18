@@ -1,0 +1,29 @@
+ACTUALIZACIÓN DE DISEÑO: Universidad de San Andrés (ESPAÑOL)
+================================================================
+
+Este paquete cambia SOLAMENTE la apariencia, los textos y la identidad visual.
+No modifica los datos ni requiere volver a ejecutar build_data.py.
+
+PASOS
+1. Descomprimí el archivo ZIP.
+2. Abrí tu carpeta original udesa-nobel-dashboard.
+3. Copiá a esa carpeta los siguientes archivos, reemplazando los anteriores:
+   - index.html
+   - style.css
+   - app.js
+   - logo_udesa.png  (nuevo)
+   - favicon.svg     (nuevo)
+4. NO borres ni reemplaces la carpeta data/ que ya contiene tus JSON reales.
+5. Si tenés el servidor local abierto, simplemente actualizá la página del navegador.
+   Si se sigue viendo la versión anterior, probá Cmd + Shift + R en Chrome.
+
+CAMBIOS INCLUIDOS
+- Todos los textos y las interacciones visibles están en español.
+- Colores inspirados en el azul principal del logo que proporcionaste.
+- Logo de Universidad de San Andrés en el encabezado.
+- Identificación explícita de las tesis del Departamento de Economía.
+- Pie de página: Tomás Pacheco, tomas3@illinois.edu.
+- Compatible con GitHub Pages: reemplazá esos cinco archivos en el repositorio.
+
+CONTACTO
+Tomás Pacheco · tomas3@illinois.edu

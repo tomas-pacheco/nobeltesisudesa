@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Visualización interactiva de menciones a ganadores del Premio Nobel de Economía en las tesis del Departamento de Economía de la Universidad de San Andrés." />
+  <meta name="theme-color" content="#215196" />
+  <title>Premios Nobel en tesis de Economía · Universidad de San Andrés</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./style.css" />
+  <script src="https://cdn.plot.ly/plotly-4.1.2.min.js" charset="utf-8" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="Inicio — Universidad de San Andrés">
+        <img src="./logo_udesa.png" alt="Universidad de San Andrés" class="university-logo" />
+      </a>
+      <nav class="header-nav" aria-label="Navegación principal">
+        <a href="#overview">Panorama general</a>
+        <a href="#ranking">Ranking</a>
+        <a href="#explore">Buscar un Nobel</a>
+        <a href="#methodology">Metodología</a>
+      </nav>
+      <a class="header-link" href="https://repositorio.udesa.edu.ar/" target="_blank" rel="noopener noreferrer">Repositorio UdeSA <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-main">
+          <div class="eyebrow"><span class="eyebrow-line"></span> UNIVERSIDAD DE SAN ANDRÉS · DEPARTAMENTO DE ECONOMÍA</div>
+          <h1>Los premios Nobel de Economía en las <em>tesis de UdeSA.</em></h1>
+          <p>Una exploración interactiva de las menciones a los apellidos de los ganadores del Premio Nobel de Economía en los trabajos de licenciatura, maestría y doctorado del Departamento de Economía de la Universidad de San Andrés.</p>
+          <div class="hero-buttons">
+            <a class="primary-link" href="#overview">Explorar los datos <span aria-hidden="true">↗</span></a>
+            <a class="quiet-link" href="#methodology">Cómo se cuentan las menciones <span aria-hidden="true">↓</span></a>
+          </div>
+        </div>
+        <div class="hero-aside" aria-hidden="true">
+          <div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div>
+          <div class="hero-number">1969<span>—</span><span id="heroLatestNobel">····</span></div>
+          <div class="hero-aside-foot">Premio Nobel de Economía<br/>Período de los galardonados</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <div id="dataMessage" class="data-message" role="status" aria-live="polite">Cargando datos…</div>
+
+      <section id="overview" class="overview-section section-block" aria-labelledby="overviewTitle">
+        <div class="section-heading">
+          <div><div class="section-kicker">01 / UNA MIRADA GENERAL</div><h2 id="overviewTitle">Panorama general</h2><p>Presencia de apellidos de ganadores del Nobel en las tesis de Economía de UdeSA.</p></div>
+          <div class="update-tag" id="updatedTag">Datos no cargados</div>
+        </div>
+
+        <div class="filters-card">
+          <div class="filter-field filter-grow"><label for="collectionFilter">Colección de tesis</label>
+            <select id="collectionFilter"><option value="all">Todas las colecciones de Economía</option></select></div>
+          <div class="filter-field"><label for="fromYear">Año de tesis: desde</label><select id="fromYear"><option value="">Todos los años</option></select></div>
+          <div class="filter-field"><label for="toYear">Hasta</label><select id="toYear"><option value="">Todos los años</option></select></div>
+          <button class="reset-button" id="resetFilters" type="button">Restablecer filtros</button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card"><span class="stat-label">Tesis en el repositorio</span><strong id="statTotal">—</strong><span class="stat-foot">Según los filtros seleccionados</span></div>
+          <div class="stat-card"><span class="stat-label">Tesis con texto analizable</span><strong id="statAnalyzed">—</strong><span class="stat-foot" id="statCoverage">Cobertura de extracción de texto</span></div>
+          <div class="stat-card featured-stat"><span class="stat-label">Tesis que mencionan un Nobel</span><strong id="statMentioning">—</strong><span class="stat-foot" id="statShare">Entre las tesis con texto</span></div>
+          <div class="stat-card"><span class="stat-label">Premiados mencionados</span><strong id="statLaureates">—</strong><span class="stat-foot">Galardonados diferentes</span></div>
+        </div>
+
+        <div class="panel wide-panel">
+          <div class="panel-heading">
+            <div><span class="panel-index">GRÁFICO 01</span><h3>¿Cómo evolucionaron las menciones a los Nobel?</h3><p>Según el año de publicación de la tesis. Se incluyen únicamente tesis con texto analizable.</p></div>
+            <div class="metric-toggle" role="group" aria-label="Métrica del gráfico de evolución">
+              <button type="button" class="selected" id="metricCount" aria-pressed="true">Cantidad</button>
+              <button type="button" id="metricShare" aria-pressed="false">Porcentaje (%)</button>
+            </div>
+          </div>
+          <div id="annualChart" class="plot-area" role="img" aria-label="Evolución anual de tesis que mencionan apellidos de premiados Nobel"></div>
+          <div class="chart-foot"><span class="key-chip"><span class="key-dot color-orange"></span> Tesis que mencionan al menos un apellido Nobel</span><span class="key-chip" id="comparisonLegend"><span class="key-dot color-navy"></span> Todas las tesis con texto analizable</span></div>
+        </div>
+      </section>
+
+      <section id="ranking" class="section-block" aria-labelledby="rankingTitle">
+        <div class="section-heading"><div><div class="section-kicker">02 / LOS MÁS MENCIONADOS</div><h2 id="rankingTitle">Ranking de premios Nobel</h2><p>¿Qué apellidos aparecen con mayor frecuencia en las tesis?</p></div></div>
+        <div class="panel">
+          <div class="panel-heading"><div><span class="panel-index">GRÁFICO 02</span><h3>Galardonados más mencionados</h3><p id="rankingSubtitle">Ordenados por cantidad de tesis que mencionan su apellido.</p></div>
+          <div class="metric-toggle" role="group" aria-label="Métrica del ranking"><button type="button" class="selected" id="rankTheses" aria-pressed="true">Tesis</button><button type="button" id="rankOccurrences" aria-pressed="false">Menciones</button></div>
+          </div>
+          <div id="rankingChart" class="plot-area ranking-plot" role="img" aria-label="Ranking de galardonados con el Nobel de Economía"></div>
+          <div class="chart-foot"><span>Hacé clic sobre una barra para explorar ese economista.</span></div>
+        </div>
+      </section>
+
+      <section id="explore" class="section-block" aria-labelledby="exploreTitle">
+        <div class="section-heading"><div><div class="section-kicker">03 / EXPLORÁ EN DETALLE</div><h2 id="exploreTitle">Buscar un premio Nobel</h2><p>Elegí un economista para ver cuántas tesis mencionan su apellido y cuáles son.</p></div></div>
+        <div class="explore-panel">
+          <div class="search-block"><label for="laureateSearch">BUSCAR POR NOMBRE O APELLIDO</label><div class="search-input-wrap"><span aria-hidden="true">⌕</span><input id="laureateSearch" type="search" autocomplete="off" placeholder="Por ejemplo: Card, Woodford, Kahneman…" /><span class="search-hint">↵</span></div><div id="laureateOptions" class="laureate-options" role="listbox" aria-label="Resultados de búsqueda"></div></div>
+          <div id="laureateDetail" class="laureate-detail" aria-live="polite"><p class="empty-detail">Seleccioná un premio Nobel para ver sus resultados.</p></div>
+        </div>
+        <div class="panel thesis-panel">
+          <div class="panel-heading thesis-head"><div><span class="panel-index">DIRECTORIO DE TESIS</span><h3 id="thesisTableTitle">Tesis que mencionan al premio Nobel seleccionado</h3><p>Los enlaces abren la ficha original de cada tesis en el repositorio de UdeSA.</p></div><div id="tableCount" class="count-tag">—</div></div>
+          <div class="table-scroller"><table class="thesis-table"><thead><tr><th>Tesis / autor</th><th>Año</th><th>Colección</th><th>Menciones</th><th>Fuente</th></tr></thead><tbody id="thesisTableBody"><tr><td colspan="5">Elegí un premio Nobel arriba.</td></tr></tbody></table></div>
+          <div class="table-actions"><span id="tableShowing"></span><button type="button" id="showMore" hidden>Mostrar más tesis ↓</button></div>
+        </div>
+      </section>
+
+      <section id="methodology" class="section-block methodology-section" aria-labelledby="methodologyTitle">
+        <div class="section-heading"><div><div class="section-kicker">04 / SOBRE LOS DATOS</div><h2 id="methodologyTitle">Metodología y limitaciones</h2></div></div>
+        <div class="method-grid">
+          <article><div class="method-num">01</div><h3>¿Qué consideramos una mención?</h3><p>Una aparición del apellido de un premio Nobel como palabra completa en el texto extraído de una tesis. No distinguimos mayúsculas y minúsculas ni tildes. Una coincidencia no implica necesariamente una referencia al economista.</p></article>
+          <article><div class="method-num">02</div><h3>Apellidos compartidos o frecuentes</h3><p>Peter Diamond y Douglas Diamond comparten el conteo del apellido «Diamond». Palabras comunes como «Card» y «Hall» no se desambiguan. Se trata deliberadamente de un contador simple de apellidos.</p></article>
+          <article><div class="method-num">03</div><h3>Cobertura y año de publicación</h3><p>Los porcentajes por año se calculan sobre tesis con archivos TXT analizables. Las tesis sin año de publicación identificable pueden aparecer en la lista de un economista, pero no en el gráfico anual.</p></article>
+          <article><div class="method-num">04</div><h3>Actualización de los datos</h3><p>Los PDF nuevos y el OCR se procesan localmente con Python. Después se actualizan los archivos JSON de esta página. Los nombres y años de premiación provienen del catálogo de Nobel del proyecto.</p></article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-project"><strong>Premios Nobel en tesis de Economía</strong><span>Departamento de Economía · Universidad de San Andrés</span><span class="footer-disclaimer">Visualización independiente basada en datos del repositorio institucional.</span></div>
+      <div class="footer-contact"><span>Proyecto y contacto</span><strong>Tomás Pacheco</strong><a href="mailto:tomas3@illinois.edu">tomas3@illinois.edu <span aria-hidden="true">↗</span></a><a class="footer-repo" href="https://repositorio.udesa.edu.ar/" target="_blank" rel="noopener noreferrer">Repositorio de UdeSA ↗</a></div>
+    </div>
+  </footer>
+</body>
+</html>
